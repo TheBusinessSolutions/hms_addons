@@ -281,10 +281,11 @@ class Appointment(models.Model):
                 elif rec.appointment_invoice_policy=='advance' and not rec.invoice_exempt:
                     acs_show_create_invoice = True
 
-            rec.acs_show_conumable_create_invoice = True if ((not rec.invoice_id) and 
-                                                   rec.state!='done' and 
+            rec.acs_show_conumable_create_invoice = True if (
+                rec.state in ['in_consultation', 'pause', 'to_invoice'] and  # Allow during active visit 
+                                                #    rec.state!='done' and 
                                                    (not rec.invoice_exempt) and
-                                                   (rec.consumable_line_count) and
+                                                   (rec.consumable_line_count > 0) and
                                                    (not rec.consumable_invoice_id) and
                                                    rec.appointment_invoice_policy!='at_end'
                                                 ) else False
@@ -525,9 +526,17 @@ class Appointment(models.Model):
         invoice = self.with_context(pricelist_context).acs_create_invoice(partner=self.patient_id.partner_id, patient=self.patient_id, product_data=product_data, inv_data=inv_data)
         self.consumable_invoice_id = invoice.id
         self.acs_appointment_common_invoicing(invoice)
-        if self.state == 'to_invoice':
-            self.appointment_done()
-
+        # if self.state == 'to_invoice':
+        #     self.appointment_done()
+    # MODIFIED: Return action to show created invoice
+        return {
+            'name': _('Consumable Invoice'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.move',
+            'view_mode': 'form',
+            'res_id': invoice.id,
+            'target': 'current',
+        }
     def action_create_invoice_with_procedure(self):
         return self.with_context(with_procedure=True).create_invoice()
 
@@ -668,6 +677,13 @@ class Appointment(models.Model):
                 h, m = divmod(m, 60)
                 self.appointment_duration = float(('%0*d')%(2,h) + '.' + ('%0*d')%(2,m*1.677966102)) - self.pause_duration
         self.date_end = datetime.now()
+        # MODIFIED: Enhanced logic to check if consumables need separate invoicing
+        needs_consumable_invoice = (
+            self.consumable_line_ids and 
+            not self.invoice_exempt and 
+            not self.consumable_invoice_id and
+            self.state in ['in_consultation', 'pause']  # Only during active consultation
+        )
         if (self.invoice_exempt or self.invoice_id) and not (self.consumable_line_ids and self.appointment_invoice_policy=='advance' and not self.invoice_exempt and not self.consumable_invoice_id):
             self.appointment_done()
         else:
@@ -687,6 +703,11 @@ class Appointment(models.Model):
                 })
 
     def appointment_done(self):
+         # MODIFIED: Added validation for consumable invoice payment if required
+        if self.consumable_invoice_id and self.company_id.acs_check_appo_payment:
+            if self.consumable_invoice_id.payment_state not in ['in_payment', 'paid']:
+                raise UserError(_('Consumable Invoice is not paid yet. Please ensure payment before completing the appointment.'))
+    
         self.state = 'done'
         if self.company_id.sudo().auto_followup_days:
             self.follow_date = self.date + timedelta(days=self.company_id.sudo().auto_followup_days)
@@ -696,8 +717,12 @@ class Appointment(models.Model):
         self.waiting_date_start = False
         self.waiting_date_end = False
 
+        # MODIFIED: Also handle consumable invoice cancellation
         if self.sudo().invoice_id and self.sudo().invoice_id.state=='draft':
             self.sudo().invoice_id.unlink()
+        
+        if self.sudo().consumable_invoice_id and self.sudo().consumable_invoice_id.state=='draft':
+            self.sudo().consumable_invoice_id.unlink()
 
     def appointment_draft(self):
         self.state = 'draft'
