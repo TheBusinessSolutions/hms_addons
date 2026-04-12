@@ -140,7 +140,7 @@
                                     </control>
                                     <field name="sequence" widget="handle"/>
                                     <field name="product_id" string="Medicine Name"/>
-                                    <field name="form_id" readonly="1" force_save="1"/>                                    <field name="name" required="1" widget="section_and_note" optional="hide"/>
+                                    <field name="form_name" readonly="1" force_save="1"/>                                    <field name="name" required="1" widget="section_and_note" optional="hide"/>
                                     <field name="active_component_ids" widget="many2many_tags" optional="hide"/>
                                     <field name="allow_substitution" optional="hide"/>
                                     <field name="common_dosage_id"/>
