@@ -5,7 +5,9 @@ from odoo import api, fields, models, _
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
-
+    
+    
+    instruction = fields.Text(string='Instructions', help='Patient instructions for this medicine')
     def acs_get_pricelist(self, partner):
         #if not partner passed use user partner
         if not partner:
