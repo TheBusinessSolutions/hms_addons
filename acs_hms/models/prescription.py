@@ -218,7 +218,12 @@ class ACSPrescriptionLine(models.Model):
     dose = fields.Float('Dosage', help="Amount of medication (eg, 250 mg) per dose",default=1.0)
     product_uom_category_id = fields.Many2one('uom.category', related='product_id.uom_id.category_id')
     dosage_uom_id = fields.Many2one('uom.uom', string='Unit of Dosage', help='Amount of Medicine (eg, mg) per dose', domain="[('category_id', '=', product_uom_category_id)]")
-    form_id = fields.Many2one('drug.form',related='product_id.form_id', string='Form',help='Drug form, such as tablet or gel')
+    # form_id = fields.Many2one('drug.form',related='product_id.form_id', string='Form',help='Drug form, such as tablet or gel')
+    form_name = fields.Char(
+        string='Form', 
+        related='product_id.form_id.name', 
+        readonly=True
+        )
     route_id = fields.Many2one('drug.route', ondelete="cascade", string='Route', help='Drug form, such as tablet or gel')
     common_dosage_id = fields.Many2one('medicament.dosage', ondelete="cascade", string='Dosage/Frequency', help='Drug form, such as tablet or gel')
     short_comment = fields.Char(string='Comment', help='Short comment on the specific drug')
