@@ -37,7 +37,7 @@ class ACSDiseases(models.Model):
         for rec in self:
             if rec.code:
                 # This will show: "Diabetes [ICD-10-D]"
-                rec.display_name = f"{rec.name} [{rec.code}]"
+                rec.display_name = f"{rec.name} [{rec.classification}]"
             else:
                 rec.display_name = rec.name
 
