@@ -141,7 +141,16 @@
                                     <field name="phone" widget="phone"/>
                                     <field name="mobile" widget="phone"/>
                                     <field name="email"/>
-                                    <field name="gov_code"/>
+                                    <!-- <field name="gov_code"/> -->
+                                    <field name="id_type" widget="radio" options="{'horizontal': true}"/>
+
+                                    <field name="gov_code" 
+                                        invisible="id_type != 'gov'" 
+                                        required="id_type == 'gov'"/>
+
+                                    <field name="passport" 
+                                        invisible="id_type != 'passport'" 
+                                        required="id_type == 'passport'"/>
                                 </group>
                             </group>
                             <group> 
