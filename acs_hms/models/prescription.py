@@ -242,7 +242,7 @@ class ACSPrescriptionLine(models.Model):
     def onchange_product(self):
         if self.product_id:
             self.active_component_ids = [(6, 0, [x.id for x in self.product_id.active_component_ids])]
-            self.form_id = self.product_id.form_id and self.product_id.form_id.id or False,
+            #self.form_id = self.product_id.form_id and self.product_id.form_id.id or False,
             self.route_id = self.product_id.route_id and self.product_id.route_id.id or False,
             self.dosage_uom_id = self.product_id.dosage_uom_id and self.product_id.dosage_uom_id.id or self.product_id.uom_id.id,
             self.quantity = 1
