@@ -25,13 +25,21 @@ class ACSDiseases(models.Model):
         ('vaccine', 'ICD-11')], string="Classification")
     sequence = fields.Integer(string='Sequence', default=60)
 
+    # def _compute_display_name(self):
+    #     for rec in self:
+    #         if rec.code:
+    #             name = rec.name + ' ' + '['+ str(rec.code) + ']'
+    #         else:
+    #             name = rec.name
+    #         rec.display_name = name
+    @api.depends('name', 'code')
     def _compute_display_name(self):
         for rec in self:
             if rec.code:
-                name = rec.name + ' ' + '['+ str(rec.code) + ']'
+                # This will show: "Diabetes [ICD-10-D]"
+                rec.display_name = f"{rec.name} [{rec.code}]"
             else:
-                name = rec.name
-            rec.display_name = name
+                rec.display_name = rec.name
 
 
 class ACSDiseasesCategory(models.Model):
