@@ -7,7 +7,6 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
     
     
-    instruction = fields.Text(string='Instructions', help='Patient instructions for this medicine')
     def acs_get_pricelist(self, partner):
         #if not partner passed use user partner
         if not partner:
@@ -60,6 +59,7 @@ class ProductProduct(models.Model):
 class product_template(models.Model):
     _inherit = "product.template"
 
+    instruction = fields.Text(string='Instructions', help='Patient instructions for this medicine')
     form_id = fields.Many2one('drug.form', ondelete='cascade', string='Drug Form', tracking=True)
     active_component_ids = fields.Many2many('active.comp', 'product_active_comp_rel', 'product_id','comp_id','Active Component')
     drug_company_id = fields.Many2one('drug.company', ondelete='cascade', string='Drug Company', help='Company producing this drug')
