@@ -35,9 +35,11 @@ class ACSDiseases(models.Model):
     @api.depends('name', 'classification')
     def _compute_display_name(self):
         for rec in self:
-            if rec.code:
-                # This will show: "Diabetes [ICD-10-D]"
-                rec.display_name = f"{rec.name} [{rec.classification}]"
+            if rec.classification:
+                # Get the human-readable label from the selection field
+                classification_label = dict(self._fields['classification'].selection).get(rec.classification)
+                # This will show: "Disease Name [ICD-10]"
+                rec.display_name = f"{rec.name} [{classification_label}]"
             else:
                 rec.display_name = rec.name
 
