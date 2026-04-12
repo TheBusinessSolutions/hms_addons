@@ -232,10 +232,7 @@ class ACSPrescriptionLine(models.Model):
     display_type = fields.Selection([
         ('line_section', "Section"),
         ('line_note', "Note")], help="Technical field for UX purpose.")
-    # This pulls the form name directly from the product
-    drug_form_id = fields.Many2one('drug.form', string='Form', 
-    related='product_id.form_id', readonly=True)
- 
+
     @api.onchange('product_id')
     def onchange_product(self):
         if self.product_id:
