@@ -32,7 +32,7 @@ class ACSDiseases(models.Model):
     #         else:
     #             name = rec.name
     #         rec.display_name = name
-    @api.depends('name', 'code')
+    @api.depends('name', 'classification')
     def _compute_display_name(self):
         for rec in self:
             if rec.code:
