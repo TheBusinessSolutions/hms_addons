@@ -219,6 +219,7 @@ class ACSPrescriptionLine(models.Model):
     product_uom_category_id = fields.Many2one('uom.category', related='product_id.uom_id.category_id')
     dosage_uom_id = fields.Many2one('uom.uom', string='Unit of Dosage', help='Amount of Medicine (eg, mg) per dose', domain="[('category_id', '=', product_uom_category_id)]")
     # form_id = fields.Many2one('drug.form',related='product_id.form_id', string='Form',help='Drug form, such as tablet or gel')
+    # https://app.clickup.com/t/86c99r2e7
     form_name = fields.Char(
         string='Form', 
         related='product_id.form_id.name', 
@@ -243,6 +244,7 @@ class ACSPrescriptionLine(models.Model):
         if self.product_id:
             self.active_component_ids = [(6, 0, [x.id for x in self.product_id.active_component_ids])]
             #self.form_id = self.product_id.form_id and self.product_id.form_id.id or False,
+            # https://app.clickup.com/t/86c99r2e7
             self.route_id = self.product_id.route_id and self.product_id.route_id.id or False,
             self.dosage_uom_id = self.product_id.dosage_uom_id and self.product_id.dosage_uom_id.id or self.product_id.uom_id.id,
             self.quantity = 1
