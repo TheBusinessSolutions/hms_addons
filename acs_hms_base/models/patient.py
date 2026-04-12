@@ -23,6 +23,21 @@ class ACSPatient(models.Model):
         string='Related Partner', help='Partner-related data of the Patient')
     gov_code = fields.Char(string='Government Identity', copy=False, tracking=True)
     gov_code_label = fields.Char(compute="acs_get_gov_code_label", string="Government Identity Label")
+    # --- add passport or gov_id option) ---
+    id_type = fields.Selection([
+        ('gov', 'Government Identity'),
+        ('passport', 'Passport')
+    ], string="ID Type", default='gov')
+    passport = fields.Char(string='Passport')
+
+    # --- Add this method at the end of the ACSPatient class ---
+    @api.constrains('gov_code')
+    def _check_gov_code(self):
+        for rec in self:
+            if rec.id_type == 'gov' and rec.gov_code:
+                # Check for exactly 14 digits and no spaces
+                if not rec.gov_code.isdigit() or len(rec.gov_code) != 14:
+                    raise ValidationError(_("Government Identity must be exactly 14 digits and contain no spaces."))
     marital_status = fields.Selection([
         ('single', 'Single'), 
         ('married', 'Married'),
