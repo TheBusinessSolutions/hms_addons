@@ -24,6 +24,7 @@
                             <field name="product_uom_category_id" invisible="1"/>
                             
                         </group> 
+                        <!-- https://app.clickup.com/t/86c99r2e9 -->
                         <group string="Clinical Instructions">
                             <field name="instruction" placeholder="Example: Take twice daily after meals..."/>
                         </group>

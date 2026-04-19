@@ -59,6 +59,7 @@ class ProductProduct(models.Model):
 class product_template(models.Model):
     _inherit = "product.template"
 
+    # https://app.clickup.com/t/86c99r2e9
     instruction = fields.Text(string='Instructions', help='Patient instructions for this medicine')
     form_id = fields.Many2one('drug.form', ondelete='cascade', string='Drug Form', tracking=True)
     active_component_ids = fields.Many2many('active.comp', 'product_active_comp_rel', 'product_id','comp_id','Active Component')
