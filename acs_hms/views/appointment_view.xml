@@ -257,6 +257,7 @@
                     <group>
                         <group>
                             <field name="patient_id" readonly="state in ['cancel','done']"/>
+                            <field name="patient_hms_code"/>
                             <field name="age"/>
                             <field name="department_id" groups="acs_hms.group_allow_multi_department" readonly="state in ['cancel','done']"/>
                             <field name="department_type" invisible="1" readonly="state in ['cancel','done']"/>
