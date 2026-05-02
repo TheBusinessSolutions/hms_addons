@@ -262,6 +262,7 @@
                             <field name="department_id" groups="acs_hms.group_allow_multi_department" readonly="state in ['cancel','done']"/>
                             <field name="department_type" invisible="1" readonly="state in ['cancel','done']"/>
                             <field name="physician_id" required="1" readonly="state in ['cancel','done']"/>
+                            <field name="consultation_type" readonly="state in ['cancel','done']"/>
                             <field name="follow_date" invisible="state not in ('in_consultation','done','to_invoice')" readonly="state in ['cancel','done']"/>
                         </group>
                         <group>
