@@ -33,6 +33,13 @@ class Appointment(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'acs.hms.mixin', 'acs.document.mixin']
     _order = "id desc"
 
+        # ✅ ADD IT HERE (class attribute, NOT a def)
+    patient_hms_code = fields.Char(
+        related='patient_id.code',
+        string='Patient HMS Code',
+        readonly=True,
+        store=True  # Stored for fast searching & tree view display
+    )
     @api.model
     def _get_service_id(self):
         consultation = False

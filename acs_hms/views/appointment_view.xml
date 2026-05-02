@@ -121,6 +121,7 @@
         <field name="arch" type="xml">
             <kanban>
                 <field name="patient_id"/>
+                <field name="patient_hms_code"/>
                 <field name="image_128"/>
                 <field name="date"/>
                 <field name="display_name"/>
@@ -139,6 +140,8 @@
                                 <ul>
                                     <li t-if="record.patient_id.raw_value">
                                         <field name="patient_id"/>
+                                        <!-- add paitent hms code -->
+                                        <field name="patient_hms_code"/>
                                     </li>
                                     <li t-if="record.date.raw_value">
                                         <field name="physician_id"/>
@@ -164,6 +167,7 @@
                 <field name="purpose_id" optional="hide"/>
                 <field name="cabin_id" optional="hide"/>
                 <field name="patient_id"/>
+                <field name="patient_hms_code" optional="hide"/>
                 <field name="date"/>
                 <field name="department_id" groups="acs_hms.group_allow_multi_department" optional="hide"/>
                 <field name="physician_id"/>
